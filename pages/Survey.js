@@ -9,29 +9,23 @@ const SurveyScreen = ({ navigation }) => {
         "How satisfied are you with the performance?",
         "Did you find the user interface intuitive?"
     ];
+    
+    // Create an array of null values for the initial ratings
+    const [ratings, setRatings] = useState(new Array(questions.length).fill(null));
+    // If every rating satisfies condiition, true
+    let allQuestionsAnswered = ratings.every(rating => rating !== null);
 
-    const [selectedRatings, setRatings] = useState(Array(questions.length).fill(null));
-
-    const handleRatingChange = (index, value) => {
-      const newRatings = [...selectedRatings];
-      newRatings[index] = value;
-      setRatings(newRatings);
+    const handleRatingUpdate = (index, value) => {
+        const newRatings = [...ratings];
+        newRatings[index] = value;
+        setRatings(newRatings);
     };
 
     const handleFinish = () => {
-        let allQuestionsAnswered = true;
-
-        // Iterate through selectedRatings array to check if any rating is still null
-        selectedRatings.forEach((rating, index) => {
-            console.log(rating);
-            if (rating === null) {
-                allQuestionsAnswered = false;
-            }
-        });
-
         // Check if all questions have been answered (no null values in ratings array)
         if (allQuestionsAnswered) {
             // Write results to the database
+
             // Navigate to 'Result' screen
             navigation.navigate('Result');
         } else {
@@ -45,11 +39,15 @@ const SurveyScreen = ({ navigation }) => {
             <Text>Survey Screen</Text>
             {questions.map((question, index) => (
                 <LikertScaleQuestion 
-                key={index}
-                question={question}
-                onRatingChange={(value) => handleRatingChange(value, index)}/>
+                    key={index}
+                    question={question}
+                    onAnswerChange={(value) => handleRatingUpdate(index, value)}
+                />
             ))}
-            <Button title='Continue' onPress={handleFinish}/>
+            <Button 
+            title='Continue' 
+            onPress={handleFinish}
+            disabled={!allQuestionsAnswered}/>
         </View>
     );
 };

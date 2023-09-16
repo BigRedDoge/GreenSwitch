@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function LikertScaleQuestion({ question, onRatingChange }) {
+export default function LikertScaleQuestion({ question, onAnswerChange }) {
   const [rating, setRating] = useState(null);
 
   const handleRatingPress = (value) => {
     setRating(value);
-    onRatingChange(value);
+    onAnswerChange(value);
   };
 
   return (

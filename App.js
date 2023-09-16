@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './app/Login';
-import SurveyScreen from './app/Survey';
-import ResultScreen from './app/Result';
+import LoginScreen from './pages/Login';
+import SurveyScreen from './pages/Survey';
+import ResultScreen from './pages/Result';
 
 export default function App() {
 
