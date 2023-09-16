@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-test-app",
-    "slug": "my-test-app",
+    "name": "GreenSwitch",
+    "slug": "GreenSwitch",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
