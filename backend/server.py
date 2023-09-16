@@ -27,6 +27,12 @@ def login():
         return jsonify({'success': True})
     else:
         return jsonify({'success': False})
+    
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'success': True})
 
 # Get the x days of scores of a company
 @app.routes('/company_scores', methods=['GET'])
