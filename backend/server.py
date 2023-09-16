@@ -20,7 +20,6 @@ def login():
     password = request.json.get('password')
     # password from db if username exists
     pw = sql.get_user(username)
-    print("pw: ", pw)
     if username is not None and password == pw:
         login_user(User(username, password))
         print("Logged in")
