@@ -21,8 +21,9 @@ sql = SQLController()
 def login():
     username = request.args.get('username')
     password = request.args.get('password')
-    user = sql.get_user(username)
-    if user is not None and user.password == password:
+    # password from db if username exists
+    pw = sql.get_user(username)
+    if username is not None and password == pw:
         login_user(User(username, password))
         return jsonify({'success': True})
     else:
