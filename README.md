@@ -1,2 +1,0 @@
-# GreenSwitch
-Hackathon Project - GreenSwitch
