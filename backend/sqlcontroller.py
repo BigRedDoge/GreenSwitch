@@ -83,3 +83,4 @@ class SQLController:
             f"SELECT score FROM {username}_user_scores ORDER BY date DESC LIMIT {days}")
         return self.cursor.fetchall()
         
+    
