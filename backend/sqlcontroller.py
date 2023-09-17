@@ -10,16 +10,23 @@ class SQLController:
 
     # Get the x days of scores of a company
     # returns dict of structure {day: {q1: value, q2: value, q3: value}}}
-    def get_company_scores(self, company, days):
-        company = format_company(company)
+    def get_company_scores(self):
         cursor = self.connection.cursor()
-        company_table = company + '_company_scores'
-        cursor.execute(
-            f"SELECT question1, question2, question3 FROM {company_table} ORDER BY date DESC LIMIT {days}")
-        results = cursor.fetchall()
+        self.cursor.execute(
+            f"SELECT * FROM companies LIMIT 3")
         scores = {}
-        for result in results:
-            scores.append(result[0] + result[1] + result[2])
+        companies = self.cursor.fetchall()
+        print(companies)
+
+        cursor = self.connection.cursor()
+        for company in companies:
+            company_table = format_company(company[0]) + '_company_scores'
+            cursor.execute(
+                f"SELECT question1, question2, question3 FROM {company_table} ORDER BY date DESC LIMIT 4")
+            results = cursor.fetchall()
+            print(results)
+            scores[company] = sum(results)
+        print(scores)
         return scores
     
     # Get the leaderboard over the last x days
