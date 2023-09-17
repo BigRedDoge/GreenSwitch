@@ -1,6 +1,8 @@
 from sqlcontroller import SQLController
 import json
 from datetime import datetime
+from datetime import date
+import random
 
 sql = SQLController()
 
@@ -25,8 +27,6 @@ def get_questions():
     subtitles = [json.loads(subs[2]) for subs in qs_and_subs]
     return questions, subtitles
 
-    
-
 
 if __name__ == '__main__':
     #add_question("Have you recycled in the past day/week?", ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"])
@@ -47,3 +47,76 @@ if __name__ == '__main__':
 
     sql.create_user("A", "A", "A", 1) 
     sql.add_company("A")
+
+    companies = ["Sustainable Living Co.", 'EcoTech Solutions', "Nature's Beauty Products", 'Clean Energy Enterprises', 'EnviroBuilders']
+    dummies = [
+        ['AliceSmith', 'P@ssw0rd1', 'Sustainable Living Co.'],
+        ['BobJohnson', 'SecurePass12', 'EcoTech Solutions'],
+        ['CatherineBrown', 'Secret12345', "Nature's Beauty Products"],
+        ['DavidWilson', 'Pa$$w0rd!', 'Clean Energy Enterprises'],
+        ['EleanorDavis', 'StrongPwd2023', 'EnviroBuilders'],
+        ['FrankMiller', 'SafePass987', 'Sustainable Living Co.'],
+        ['GraceTaylor', '1234Password', 'EcoTech Solutions'],
+        ['HenryLee', 'P@ss1234', "Nature's Beauty Products"],
+        ['IsabelGarcia', 'SecurityP@ss', 'Clean Energy Enterprises'],
+        ['JackAnderson', 'P@ssword567', 'EnviroBuilders'],
+        ['KatherineWhite', 'SuperSafePwd', 'Sustainable Living Co.'],
+        ['LiamHarris', 'Pa$$w0rd2023', 'EcoTech Solutions'],
+        ['MiaClark', 'SecretPwd789', "Nature's Beauty Products"],
+        ['NathanTurner', '12345Secure', 'Clean Energy Enterprises'],
+        ['OliviaAllen', 'StrongP@ss1', 'EnviroBuilders'],
+        ['PatrickScott', 'SafePwd12', 'Sustainable Living Co.'],
+        ['QuinnLewis', 'Pa$$w0rd!', 'EcoTech Solutions'],
+        ['RachelMartin', 'SuperPass2023', "Nature's Beauty Products"],
+        ['SamuelHall', 'Password123!', 'Clean Energy Enterprises'],
+        ['TaylorAdams', 'SecureP@ssword', 'EnviroBuilders'],
+        ['UrsulaRodriguez', 'SafePwd1234', 'Sustainable Living Co.'],
+        ['VictorGreen', 'P@ssword456', 'EcoTech Solutions'],
+        ['WendyBaker', '1234SecurePwd', "Nature's Beauty Products"],
+        ['XavierLopez', 'StrongPass!', 'Clean Energy Enterprises'],
+        ['YasmineSmith', 'Pa$$word5678', 'EnviroBuilders'],
+        ['ZacharyTurner', 'SecurePwd2022', 'Sustainable Living Co.'],
+        ['AvaWilliams', 'StrongSecure1', 'EcoTech Solutions'],
+        ['BenjaminDavis', 'P@ssword1234', "Nature's Beauty Products"],
+        ['CharlotteMartinez', 'SafeP@ss12', 'Clean Energy Enterprises'],
+        ['DanielHarris', 'Secure12345', 'EnviroBuilders'],
+        ['EmilyJohnson', 'Pa$$w0rd2021', 'Sustainable Living Co.'],
+        ['FinnAnderson', 'SecretPassword', 'EcoTech Solutions'],
+        ['GraceLee', 'SecurePwd!', "Nature's Beauty Products"],
+        ['HenryJackson', 'StrongPass2022', 'Clean Energy Enterprises'],
+        ['IsabellaTaylor', 'P@ssword123!', 'EnviroBuilders'],
+        ['JacobBrown', 'SafeP@ss1234', 'Sustainable Living Co.'],
+        ['KatherineGarcia', 'SuperP@ssword', 'EcoTech Solutions'],
+        ['LiamMoore', '12345SecurePwd', "Nature's Beauty Products"],
+        ['MiaClark', 'StrongPass!', 'Clean Energy Enterprises'],
+        ['NathanTurner', 'P@ssword456', 'EnviroBuilders'],
+        ['OliviaAdams', 'SecurePwd2021', 'Sustainable Living Co.'],
+        ['PatrickMartin', 'StrongSecure1', 'EcoTech Solutions'],
+        ['QuinnHall', 'P@ssword1234', "Nature's Beauty Products"],
+        ['RachelScott', 'SafeP@ss12', 'Clean Energy Enterprises'],
+        ['SamuelWhite', 'Secure12345', 'EnviroBuilders'],
+        ['TaylorBaker', 'Pa$$word2022', 'Sustainable Living Co.'],
+        ['UrsulaAllen', 'SecretPassword', 'EcoTech Solutions'],
+        ['VictorTurner', 'SecurePwd!', "Nature's Beauty Products"],
+        ['WendyLewis', 'StrongPass2022', 'Clean Energy Enterprises'],
+        ['XavierRodriguez', 'Pa$$word123!', 'EnviroBuilders']
+    ]
+
+    # for company in companies:
+    #     sql.add_company(company)
+
+    # for dummy in dummies:
+    #     sql.create_user(dummy[0], dummy[1], dummy[2], 1)
+    #     dayweeks = [7, 14, 21, 28]
+    #     for i in range(20):
+    #         month = i % 5 + 1
+    #         day = dayweeks[i % 4]
+    #         year = 2023
+    #         fake_date = date(year, month, day)
+    #         for id in range(3):
+    #             sql.add_user_score(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
+    #             print(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
+
+    #print(sql.get_company_scores())
+    print(sql.get_company_leaderboard("Sustainable Living Co."))
+

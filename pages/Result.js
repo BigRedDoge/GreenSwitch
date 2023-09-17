@@ -3,12 +3,22 @@ import { View, Text, StyleSheet } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
 
 const ResultScreen = () => {
-  // Sample data for the bar graph (replace with your actual data)
-  const data = {
-    labels: ['Question 1', 'Question 2', 'Question 3'],
+  // Sample data for the first bar graph
+  const data1 = {
+    labels: ['Company A', 'Company B', 'Company C'],
     datasets: [
       {
-        data: [4, 3, 5], // Sample values for the questions
+        data: [400, 320, 550], // Sample values for the first chart
+      },
+    ],
+  };
+
+  // Sample data for the second bar graph
+  const data2 = {
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    datasets: [
+      {
+        data: [15, 25, 10, 15], // Sample values for the second chart
       },
     ],
   };
@@ -17,13 +27,32 @@ const ResultScreen = () => {
     <View style={styles.container}>
       <Text style={styles.heading}>Result Screen</Text>
 
-      {/* Bar Chart */}
+      {/* First Bar Chart */}
       <BarChart
-        data={data}
-        width={300}
-        height={200}
+        data={data1}
+        width={400} // Increase width
+        height={300} // Increase height
         yAxisLabel=""
         yAxisSuffix="p" // Remove the suffix
+        chartConfig={{
+          backgroundGradientFrom: '#ffffff', // Change background color gradient start
+          backgroundGradientTo: '#ffffff',   // Change background color gradient end
+          color: (opacity = 1) => `rgba(63, 64, 60, ${opacity})`, // Change bar color
+          labelColor: (opacity = 1) => `rgba(63, 64, 60, ${opacity})`, // Change label color
+          style: {
+            marginVertical: 20, // Increase margin to create space for yAxis label
+          },
+        }}
+        style={styles.chart}
+      />
+
+      {/* Second Bar Chart */}
+      <BarChart
+        data={data2}
+        width={400} // Increase width
+        height={300} // Increase height
+        yAxisLabel=""
+        yAxisSuffix="" // No suffix for the second chart
         chartConfig={{
           backgroundGradientFrom: '#ffffff', // Change background color gradient start
           backgroundGradientTo: '#ffffff',   // Change background color gradient end
@@ -57,7 +86,7 @@ const styles = StyleSheet.create({
   chart: {
     marginVertical: 20,
   },
-  // Add additional styles for your main content here
+
 });
 
 export default ResultScreen;
