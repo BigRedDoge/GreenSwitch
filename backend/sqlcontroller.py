@@ -57,6 +57,16 @@ class SQLController:
         #sorted(leaderboard, key=lambda x: leaderboard[x])
         return leaderboard
 
+    # Get user scores
+    def get_user_scores(self, username):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"SELECT question1, question2, question3 FROM {username}_user_scores ORDER BY date DESC LIMIT 4")
+        results = cursor.fetchall()
+        for result in results:
+            print(sum([res[0] for res in result if res[0] is not None]))
+        return results
+
     # Add company to database
     def add_company(self, company):
         company = format_company(company)
