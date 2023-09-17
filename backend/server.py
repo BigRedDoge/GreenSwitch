@@ -110,6 +110,7 @@ def submit_score():
 @app.route('/get_companies_scores', methods=['GET'])
 def get_companies_scores():
     scores = sql.get_company_scores()
+    print(scores)
     return jsonify(scores)
 
 # Get company leaderboard
