@@ -13,7 +13,7 @@ class SQLController:
     def get_company_scores(self):
         cursor = self.connection.cursor()
         self.cursor.execute(
-            f"SELECT * FROM companies LIMIT 3 WHERE company != 'A' OR company != 'a'")
+            f"SELECT * FROM companies WHERE company != 'A' AND company != 'a' LIMIT 3")
         scores = {}
         companies = self.cursor.fetchall()
         print(companies)
