@@ -89,8 +89,8 @@ class SQLController:
             check if user has score for that date
             if not, add score to user and company
             else, update score for user and company
-
             """
+            
             cursor.execute(
                     f"SELECT company FROM users WHERE username='A'")#, (username,))
             company = self.cursor.fetchone()
