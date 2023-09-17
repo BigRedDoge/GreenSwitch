@@ -65,8 +65,8 @@ def create_user():
 def add_user_score():
     username = request.json.get('username')
     score = request.json.get('score')
-    date = date.today()
-    success = sql.add_user_score(username, score, date)
+    dt = date.today()
+    success = sql.add_user_score(username, score, dt)
     return jsonify({'success': success})
 
 # Get the x days of scores of a user
@@ -103,9 +103,10 @@ def submit_score():
     print(username)
     score = request.json.get('score')
     id = request.json.get('id')
-    date = date.today()
-    success = sql.add_user_score(username, id, score, date)
-    return jsonify({'success': success})
+    dt = date.today()
+    success = sql.add_user_score(username, id, score, dt)
+    print("success: ", success)
+    return jsonify({})#jsonify({'success': success})
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -117,7 +118,7 @@ def load_user(user_id):
 # user streaks - variable based on company
 # users to be marked as admin
 # users each question score tracked
-
+# questions cycle
 
 # Have you recycled in the past day/week? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]
 # How likely are you to participate in Riverfront Recapture? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]

@@ -20,7 +20,6 @@ class SQLController:
         for result in results:
             scores.append(result[0] + result[1] + result[2])
         return scores
-        return cursor.fetchall()
     
     # Get the leaderboard over the last x days
     # TODO: BROKEN
@@ -43,7 +42,7 @@ class SQLController:
     def add_company(self, company):
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT * FROM companies WHERE name=?", (company,))
+            cursor.execute("SELECT * FROM companies WHERE company=?", (company,))
             if cursor.fetchone() is None:
                 cursor.execute(
                     f"CREATE TABLE IF NOT EXISTS {company}_company_scores (date TEXT, question1 INTEGER, question2 INTEGER, question3 INTEGER)")
@@ -58,7 +57,7 @@ class SQLController:
             return False
 
     # Create user
-    def create_user(self, username, password, company):
+    def create_user(self, username, password, company, admin=0):
         try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT * FROM users WHERE username=?", (username,))
@@ -66,7 +65,8 @@ class SQLController:
                 # Add user to user table
                 cursor = self.connection.cursor()
                 cursor.execute(
-                    "INSERT INTO users VALUES (?, ?, ?)", (username, password, company,))
+                    "INSERT INTO users VALUES (?, ?, ?, ?)", (username, password, company, admin,))
+                self.connection.commit()
                 # Create user score table
                 cursor = self.connection.cursor()
                 cursor.execute(
@@ -83,38 +83,49 @@ class SQLController:
     def add_user_score(self, username, id, score, date):
         try:
             cursor = self.connection.cursor()
+
+            """
+            get company
+            check if user has score for that date
+            if not, add score to user and company
+            else, update score for user and company
+
+            """
+            cursor.execute(
+                    f"SELECT company FROM users WHERE username='A'")#, (username,))
+            company = self.cursor.fetchone()
+            print("company: ", company)
+
             cursor.execute(
                 f"SELECT * FROM {username}_user_scores WHERE date=?", (date,))
+            day_score = cursor.fetchone()
+
             # If there is no score for that date, add it
-            if cursor.fetchone() is None:
+            if day_score is None:
                 # Update user score
                 cursor.execute(
-                    f"INSERT INTO {username}_user_scores (date, question{id}) VALUES (?) WHERE ", (date, score,))
+                    f"INSERT INTO {username}_user_scores (date, question{id+1}) VALUES (?, ?) ", (date, score,))
                 
-                # Update company score
-                cursor.execute(
-                    f"SELECT company FROM users WHERE username=?", (username,))
-                company = self.cursor.fetchone()[0]
-                
+                # Update company score  
                 cursor.execute(
                     f"SELECT * FROM {company}_company_scores WHERE date=?", (date,))
                 if cursor.fetchone() is None:
                     cursor.execute(
-                        f"INSERT INTO {company}_company_scores (date, question{id}) VALUES (?) WHERE ", (date, score,))
+                        f"INSERT INTO {company}_company_scores (date, question{id+1}) VALUES (?, ?) ", (date, score,))
                 else:
                     cursor.execute(
-                        f"UPDATE {company}_company_scores SET question{id}=question{id}+? WHERE date=?", (score, date,))
+                        f"UPDATE {company}_company_scores SET question{id+1}=question{id+1}+? WHERE date=?", (score, date,))
                 self.connection.commit()
                 return True
             else:
                 # Update user score for question id
                 cursor.execute(
-                    f"UPDATE {username}_user_scores SET question{id}=score? WHERE date=?", (score, date,))
+                    f"UPDATE {username}_user_scores SET question{id+1}=? WHERE date=?", (score, date,))
                 # Update company score for question id
                 cursor.execute(
-                        f"UPDATE {company}_company_scores SET question{id}=question{id}+? WHERE date=?", (score, date,))
+                        f"UPDATE {company}_company_scores SET question{id+1}=question{id+1}+? WHERE date=?", (score, date,))
                 self.connection.commit()
-                return False
+                return True
         except Exception as e:
             print("add_user_score Exception", e)
             return False    
