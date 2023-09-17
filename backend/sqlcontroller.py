@@ -25,7 +25,7 @@ class SQLController:
                 f"SELECT question1, question2, question3 FROM {company_table} ORDER BY date DESC LIMIT 4")
             results = cursor.fetchall()
             print(results)
-            scores[company] = sum(results)
+            scores[company] = sum([result[0] for result in results])
         print(scores)
         return scores
     
