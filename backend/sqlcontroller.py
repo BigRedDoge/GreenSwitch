@@ -63,8 +63,9 @@ class SQLController:
         cursor.execute(
             f"SELECT question1, question2, question3 FROM {username}_user_scores ORDER BY date DESC LIMIT 4")
         results = cursor.fetchall()
+        print(results)
         for result in results:
-            print(sum([res[0] for res in result if res[0] is not None]))
+            print([sum(res) for res in result if res is not None])
         return results
 
     # Add company to database
