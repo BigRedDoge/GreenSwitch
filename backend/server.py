@@ -20,7 +20,7 @@ def login():
     password = request.json.get('password')
     # password from db if username exists
     pw = sql.get_user(username)
-    if username is not None and password == pw:
+    if username is not None and pw and password == pw:
         login_user(User(username, password))
         user = current_user
         print(user.username)
@@ -112,7 +112,7 @@ def submit_score():
 # user streaks - variable based on company
 # users to be marked as admin
 # users each question score tracked
-# pip freeze
+# error handling
 
 
 # Have you recycled in the past day/week? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]
