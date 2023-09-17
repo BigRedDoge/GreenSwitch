@@ -30,6 +30,7 @@ class SQLController:
         return scores
     
     # Get the leaderboard over the last x days
+    # DanielHarris|Secure12345|EnviroBuilders|1
     # TODO: BROKEN
     def get_company_leaderboard(self, company):
         company = format_company(company)
