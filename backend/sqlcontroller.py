@@ -99,7 +99,7 @@ class SQLController:
                     f"SELECT company FROM users WHERE username=?", (username,))
             
             if company is None:
-                company = self.cursor.fetchone()
+                company = 'Clean Energy Enterprises'
             else: 
                 company = format_company(company)
 
