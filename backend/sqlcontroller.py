@@ -80,7 +80,7 @@ class SQLController:
             return False
 
     # Add user score
-    def add_user_score(self, username, id, score, date):
+    def add_user_score(self, username, id, score, date, company=None):
         try:
             cursor = self.connection.cursor()
 
@@ -93,8 +93,9 @@ class SQLController:
             
             cursor.execute(
                     f"SELECT company FROM users WHERE username='A'")#, (username,))
-            company = self.cursor.fetchone()
-            print("company: ", company)
+            
+            if company is None:
+                company = self.cursor.fetchone()
 
             cursor.execute(
                 f"SELECT * FROM {username}_user_scores WHERE date=?", (date,))
