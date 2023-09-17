@@ -1,4 +1,6 @@
 import sqlite3
+from datetime import datetime
+import json
 
 
 class SQLController:
@@ -36,7 +38,7 @@ class SQLController:
         cursor.execute("SELECT * FROM companies WHERE name=?", (company,))
         if cursor.fetchone() is None:
             cursor.execute(
-                f"CREATE TABLE IF NOT EXISTS {company}_company_scores (date TEXT, score INTEGER)")
+                f"CREATE TABLE IF NOT EXISTS {company}_company_scores (date TEXT, question1 INTEGER, question2 INTEGER, question3 INTEGER)")
             cursor.execute(
                 f"INSERT INTO companies VALUES ('{company}')")
             self.connection.commit()
@@ -57,14 +59,14 @@ class SQLController:
             # Create user score table
             cursor = self.connection.cursor()
             cursor.execute(
-                f"CREATE TABLE IF NOT EXISTS {username}_user_scores (date TEXT, score INTEGER)")
+                f"CREATE TABLE IF NOT EXISTS {username}_user_scores (date TEXT, question1 INTEGER, question2 INTEGER, question3 INTEGER)")
             self.connection.commit()
             return True
         else:
             return False
     
     # Add user score
-    def add_user_score(self, username, score, date):
+    def add_user_score(self, username, id, score, date):
         cursor = self.connection.cursor()
         cursor.execute(
             f"SELECT * FROM {username}_user_scores WHERE date=?", (date,))
@@ -72,17 +74,31 @@ class SQLController:
         if cursor.fetchone() is None:
             # Update user score
             cursor.execute(
-                f"INSERT INTO {username}_user_scores VALUES (?, ?)", (date, score,))
-           
+                f"INSERT INTO {username}_user_scores (date, question{id}) VALUES (?) WHERE ", (date, score,))
+            
             # Update company score
             cursor.execute(
                 f"SELECT company FROM users WHERE username=?", (username,))
             company = self.cursor.fetchone()[0]
+            
             cursor.execute(
-                f"UPDATE {company}_company_scores SET score=score+? WHERE date=?", (score, date,))
+                f"SELECT * FROM {company}_company_scores WHERE date=?", (date,))
+            if cursor.fetchone() is None:
+                cursor.execute(
+                    f"INSERT INTO {company}_company_scores (date, question{id}) VALUES (?) WHERE ", (date, score,))
+            else:
+                cursor.execute(
+                    f"UPDATE {company}_company_scores SET question{id}=question{id}+? WHERE date=?", (score, date,))
             self.connection.commit()
             return True
         else:
+            # Update user score for question id
+            cursor.execute(
+                f"UPDATE {username}_user_scores SET question{id}=score? WHERE date=?", (score, date,))
+            # Update company score for question id
+            cursor.execute(
+                    f"UPDATE {company}_company_scores SET question{id}=question{id}+? WHERE date=?", (score, date,))
+            self.connection.commit()
             return False
     
     # Get the x days of scores of a user
@@ -90,8 +106,34 @@ class SQLController:
         self.cursor.execute(
             f"SELECT score FROM {username}_user_scores ORDER BY date DESC LIMIT {days}")
         return self.cursor.fetchall()
-        
+    
+    # Get the password of a user
     def get_user(self, username):
         cursor = self.connection.cursor()
         cursor.execute("SELECT password FROM users WHERE username=?", (username,))
         return cursor.fetchone()[0]
+    
+    # Get latest questions 
+    def get_questions(self, num_questions):
+        # cursor = self.connection.cursor()
+        # cursor.execute(f"SELECT * FROM questions ORDER BY last_accessed DESC LIMIT {num_questions}")
+        # questions = cursor.fetchall()
+        # for question in questions:
+        #     cursor.execute("UPDATE questions set last_accessed = ? WHERE id = ?", (datetime.now(), question[0]))
+        # self.connection.commit()
+        # questions = [question[1] for question in questions]
+        # subtitles = [json.loads(question[2]) for question in questions]
+        
+        cursor = self.connection.cursor()
+        cursor.execute(f"SELECT * FROM questions ORDER BY last_accessed DESC LIMIT {num_questions}")
+        qs_and_subs = cursor.fetchall()
+        
+        for question in qs_and_subs:
+            cursor.execute("UPDATE questions set last_accessed = ? WHERE id = ?", (datetime.now(), question[0]))
+        self.connection.commit()
+
+        questions = [question[1] for question in qs_and_subs]
+        subtitles = [json.loads(subs[2]) for subs in qs_and_subs]
+        return questions, subtitles
+        
+
