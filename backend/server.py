@@ -106,6 +106,19 @@ def submit_score():
     print("success: ", success)
     return jsonify({'success': success})
 
+# Get company leaderboard
+@app.route('/get_companies_scores', methods=['GET'])
+def get_companies_scores():
+    scores = sql.get_company_scores()
+    return jsonify(scores)
+
+# Get company leaderboard
+@app.route('/get_company_leaderboard', methods=['GET'])
+def get_company_leaderboard():
+    company = sql.get_company(current_user.company)
+    leaderboard = sql.get_company_leaderboard(company)
+    return jsonify(leaderboard)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id, sql.get_user(user_id))
