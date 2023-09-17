@@ -86,7 +86,6 @@ def get_company_leaderboard():
     leaderboard = sql.get_company_leaderboard(company, days, num_users)
     return jsonify(leaderboard)
 
-
 @app.route('/get_questions', methods=['GET'])
 def get_questions():
     q_count = 3
@@ -100,13 +99,12 @@ def get_questions():
 @app.route('/submit_score', methods=['POST'])
 def submit_score():
     username = current_user.username
-    print(username)
     score = request.json.get('score')
     id = request.json.get('id')
     dt = date.today()
     success = sql.add_user_score(username, id, score, dt)
     print("success: ", success)
-    return jsonify({})#jsonify({'success': success})
+    return jsonify({'success': success})
 
 @login_manager.user_loader
 def load_user(user_id):
