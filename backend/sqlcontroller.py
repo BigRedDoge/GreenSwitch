@@ -34,8 +34,9 @@ class SQLController:
     def get_company_leaderboard(self, company):
         company = format_company(company)
         cursor = self.connection.cursor()
-        users = cursor.execute(
+        cursor.execute(
             f"SELECT username FROM users WHERE company=?", (company,))
+        users = cursor.fetchall()
         leaderboard = {}
         # Get the score of each user
         for user in users:
