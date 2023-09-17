@@ -116,7 +116,7 @@ def get_companies_scores():
 # Get company leaderboard
 @app.route('/get_company_leaderboard', methods=['GET'])
 def get_company_leaderboard():
-    company = sql.get_company(current_user.company)
+    company = sql.get_company(current_user.username)
     leaderboard = sql.get_company_leaderboard(company)
     print(leaderboard)
     return jsonify(leaderboard)
