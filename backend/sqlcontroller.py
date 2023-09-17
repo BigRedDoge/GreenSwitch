@@ -96,7 +96,7 @@ class SQLController:
             """
             
             cursor.execute(
-                    f"SELECT company FROM users WHERE username='A'")#, (username,))
+                    f"SELECT company FROM users WHERE username=?, (username,))")
             
             if company is None:
                 company = self.cursor.fetchone()
