@@ -2,17 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, TouchableOpacity } from 'react-native';
 import LikertScaleQuestion from './LikertScaleQuestion';
 import Likert from './Likert';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const SurveyScreen = ({ navigation }) => {
 
-    const testLikerts = [
-        new Likert(136627, "How satisfied are you with the performance?", ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]),
-        new Likert(123627, "How would you rate the design of this app?", ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]),
-        new Likert(152362, "Did you find the user interface intuitive?", ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"])
-    ];
+    const getLikerts = () => {
+        // Fetch likerts from the database
+        fetch("http://127.0.0.1:5000/get_questions")
+            .then(response => response.json())
+            .then(data => {
+                let likerts = [];
+                data.forEach((item, index) => {
+                    likerts.push(new Likert(item.id, item.question, item.subtitles));
+                });
+                console.log("Likerts:", likerts)
+                setLikerts(likerts);
+                //return likerts;
+            })
+            .catch(error => {
+                console.error("Error during fetch:", error);
+            });
+    };
 
+    useEffect(() => {
+        getLikerts();
+    }, []);
     // State to store the likerts
-    const [likerts, setLikerts] = useState(testLikerts);
+    const [likerts, setLikerts] = useState([]);
 
     // State to store the ratings
     const [ratings, setRatings] = useState(new Array(testLikerts.length).fill(null));

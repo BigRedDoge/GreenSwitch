@@ -112,6 +112,7 @@ def submit_score():
 # user streaks - variable based on company
 # users to be marked as admin
 # users each question score tracked
+# pip freeze
 
 
 # Have you recycled in the past day/week? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]
