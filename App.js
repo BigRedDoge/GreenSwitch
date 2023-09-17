@@ -2,51 +2,58 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import Results from './Results.js';
 
 export default function App() {
-  return (
-    <Results />
-  );
-  /*
   const [data, setData] = useState({
-        name: "",
-        age: 0,
-        date: "",
-        programming: "",
+        data: []
   });
 
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/data").then((res) =>
+    fetch("http://127.0.0.1:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: "test1",
+        password: "test1",
+      })
+    }).then((res) =>  {
       res.json().then((data) => {
         setData({
-          name: data.Name,
-          age: data.Age,
-          date: data.Date,
-          programming: data.programming,
+          data: data
         });
       })
-    );
+    });
+    fetch("http://127.0.0.1:5000/get_questions", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) =>  {
+      res.json().then((data) => {
+        console.log(data);
+      })
+    });
+
+
+    /*fetch("http://127.0.0.1:5000/data").then((res) =>
+      res.json().then((data) => {
+        setData({
+          data: data
+        });
+      })
+    );*/
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Hello World! {count}</Text>
-      <Hello name="name" />
-      <Text>{data.name}</Text>
-      <Text>{data.age}</Text>
-      <Text>{data.date}</Text>
-      <Text>{data.programming}</Text>
-      <Button 
-        onPress={() => setCount(count + 1)}
-        title="Click me"
-      />
+      <Text>Hello</Text>
       <StatusBar style="auto" />
     </View>
   );
-  */
 }
 
 
@@ -66,3 +73,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
