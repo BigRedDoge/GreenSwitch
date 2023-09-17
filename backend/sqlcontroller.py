@@ -65,10 +65,11 @@ class SQLController:
         results = cursor.fetchall()
         print(results)
         data = {}
-        for i, result in enumerate(results):
-            print(result)
-            data[i] = [sum(res) for res in result if res is not None]
-        return results
+        d = [sum(res) for res in results if res is not None]
+        for dd in d:
+            print(dd)
+            data[dd] = d
+        return data
 
     # Add company to database
     def add_company(self, company):
