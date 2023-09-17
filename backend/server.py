@@ -20,16 +20,15 @@ def login():
     password = request.json.get('password')
     # password from db if username exists
     pw = sql.get_user(username)
-    if username is not None and password == pw:
+    if username is not None and pw and password == pw:
         login_user(User(username, password))
-        print("Logged in")
         user = current_user
         print(user.username)
         return jsonify({'success': True})
     else:
         print("Not logged in")
         return jsonify({'success': False})
-    
+
 @app.route('/logout', methods=['POST'])
 @login_required
 def logout():
@@ -87,14 +86,43 @@ def get_company_leaderboard():
     leaderboard = sql.get_company_leaderboard(company, days, num_users)
     return jsonify(leaderboard)
 
+
+@app.route('/get_questions', methods=['GET'])
+def get_questions():
+    q_count = 3
+    questions, subtitles = sql.get_questions(q_count)
+    response = []
+    for i in range(len(questions)):
+        response.append({'id': i, 'question': questions[i], 'subtitles': subtitles[i]})
+    return jsonify(response)
+
+# Submit score for question
+@app.route('/submit_score', methods=['POST'])
+def submit_score():
+    username = current_user.username
+    print(username)
+    score = request.json.get('score')
+    id = request.json.get('id')
+    date = date.today()
+    success = sql.add_user_score(username, id, score, date)
+    return jsonify({'success': success})
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id, sql.get_user(user_id))
+
 # route for answers to questions -> calculate score and enter into db
-# delete route for adding user score
-# algorithm for calculating score
-# user login/logout
 # number of responses for questions
 # question table
 # user streaks - variable based on company
 # users to be marked as admin
+# users each question score tracked
+
+
+# Have you recycled in the past day/week? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]
+# How likely are you to participate in Riverfront Recapture? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]
+# How did you commute to work? - ["Car", "Carpool", "Bus", "Train/Rail", "Walking/Cycling"] 
+# 
 
 
 # Running app

@@ -21,7 +21,37 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('Survey'); // Navigate to 'Survey'
   };
 
-  const handleAdminButton = () => {
+    const handleLogin = () => {
+        // Logic for handling login, e.g., authentication
+        fetch("http://54.198.183.99:5000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Depending on your backend's response structure, adjust this
+            // For example, if your backend sends `{ success: true }` on successful login:
+            if (data.success) {
+                navigation.navigate('Survey');
+            } else {
+                // Handle login failure, show an error message, etc.
+                //console.error("Login failed:", data.message);
+                
+            }
+        })
+        .catch(error => {
+            console.error("Error during fetch:", error);
+        });
+        // Navigate to another screen after successful login
+        //navigation.navigate('Survey'); // Navigate to 'Survey'
+    };
+
 
     navigation.navigate('Admin');
   };
