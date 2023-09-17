@@ -66,6 +66,7 @@ class SQLController:
         print(results)
         data = {}
         for i, result in enumerate(results):
+            print(result)
             data[i] = [sum(res) for res in result if res is not None]
         return results
 
