@@ -1,17 +1,10 @@
-<<<<<<< HEAD
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './pages/Login';
 import SurveyScreen from './pages/Survey';
 import ResultScreen from './pages/Result';
-=======
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import Results from './Results.js';
->>>>>>> origin/backend
 
 export default function App() {
 
@@ -34,7 +27,6 @@ export default function App() {
   const Stack = createStackNavigator();
 
   return (
-<<<<<<< HEAD
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen}/>
@@ -42,8 +34,6 @@ export default function App() {
         <Stack.Screen name="Result" component={ResultScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
-=======
-    <Results />
   );
   /*
   const [data, setData] = useState({
@@ -82,15 +72,7 @@ export default function App() {
       />
       <StatusBar style="auto" />
     </View>
->>>>>>> origin/backend
-  );
-  */
-}
 
-
-const Hello = props => {
-  return (
-    <View>
       <Text>Hello {props.name}</Text>
     </View>
   );
