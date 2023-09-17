@@ -164,14 +164,6 @@ class SQLController:
             print("add_user_score Exception", e)
             return False    
 
-    # Get the x days of scores of a user
-    # TODO: BROKEN
-    def get_user_scores(self, username, days):
-        self.cursor.execute(
-            f"SELECT score FROM {username}_user_scores ORDER BY date DESC LIMIT {days}")
-        return self.cursor.fetchall()
-    
-
     # Get the password of a user
     def get_user(self, username):
         try:
