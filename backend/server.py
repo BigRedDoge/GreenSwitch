@@ -78,13 +78,13 @@ def get_user_scores():
     return jsonify(scores)
 
 # Get the leaderboard over the last x days for y users
-@app.route('/get_company_leaderboard', methods=['GET'])
-def get_company_leaderboard():
-    company = request.json.get('company')
-    days = request.json.get('days')
-    num_users = request.json.get('num_users')
-    leaderboard = sql.get_company_leaderboard(company, days, num_users)
-    return jsonify(leaderboard)
+# @app.route('/get_company_leaderboard', methods=['GET'])
+# def get_company_leaderboard():
+#     company = request.json.get('company')
+#     days = request.json.get('days')
+#     num_users = request.json.get('num_users')
+#     leaderboard = sql.get_company_leaderboard(company, days, num_users)
+#     return jsonify(leaderboard)
 
 @app.route('/get_questions', methods=['GET'])
 def get_questions():
