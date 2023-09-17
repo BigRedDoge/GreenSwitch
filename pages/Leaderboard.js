@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 const Leaderboard = () => {
-  // Dummy data of users ranked
-  const leaderboardData = [
-    { name: 'User 1', score: 1200 },
-    { name: 'User 2', score: 1050 },
-    { name: 'User 3', score: 950 },
-    { name: 'User 4', score: 880 },
-    { name: 'User 5', score: 750 },
-    { name: 'User 6', score: 600 },
-  ];
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Fetch companies from the database
+    fetch("http://54.198.183.99:5000/get_company_leaderboard")
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setUserData(data); // Store the data in state
+      })
+      .catch(error => {
+        console.error("get_company_leaderboard: error during fetch:", error);
+      });
+  }, []);
+
+  // Transform userData into an array of objects
+  const leaderboardData = userData
+    ? Object.entries(userData).map(([name, score]) => ({ name, score }))
+    : [];
+
+  // Sort leaderboardData by score in descending order
+  leaderboardData.sort((a, b) => b.score - a.score);
 
   // Render each leaderboard item
   const renderItem = ({ item, index }) => (
@@ -56,7 +69,7 @@ const styles = StyleSheet.create({
     width: '89%', // Adjusted width to 100%
     marginVertical: 5,
     borderRadius: 5,
-  },  
+  },
   rank: {
     fontSize: 16,
     fontWeight: 'bold',
