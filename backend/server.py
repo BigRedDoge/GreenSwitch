@@ -118,6 +118,7 @@ def get_companies_scores():
 def get_company_leaderboard():
     company = sql.get_company(current_user.company)
     leaderboard = sql.get_company_leaderboard(company)
+    print(leaderboard)
     return jsonify(leaderboard)
 
 @login_manager.user_loader
