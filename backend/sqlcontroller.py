@@ -66,9 +66,9 @@ class SQLController:
         print(results)
         data = {}
         d = [sum(res) for res in results if res is not None]
-        for dd in d:
+        for i, dd in enumerate(d):
             print(dd)
-            data[dd] = d
+            data[i] = d
         return data
 
     # Add company to database
