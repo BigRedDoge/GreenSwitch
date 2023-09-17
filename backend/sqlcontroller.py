@@ -11,6 +11,7 @@ class SQLController:
     # Get the x days of scores of a company
     # returns dict of structure {day: {q1: value, q2: value, q3: value}}}
     def get_company_scores(self, company, days):
+        company = format_company(company)
         cursor = self.connection.cursor()
         company_table = company + '_company_scores'
         cursor.execute(
@@ -24,6 +25,7 @@ class SQLController:
     # Get the leaderboard over the last x days
     # TODO: BROKEN
     def get_company_leaderboard(self, company, days, num_users):
+        company = format_company(company)
         cursor = self.connection.cursor()
         users = cursor.execute(
             f"SELECT username FROM users WHERE company=?", (company,))
@@ -40,6 +42,7 @@ class SQLController:
 
     # Add company to database
     def add_company(self, company):
+        company = format_company(company)
         try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT * FROM companies WHERE company=?", (company,))
@@ -58,6 +61,7 @@ class SQLController:
 
     # Create user
     def create_user(self, username, password, company, admin=0):
+        company = format_company(company)
         try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT * FROM users WHERE username=?", (username,))
@@ -96,6 +100,8 @@ class SQLController:
             
             if company is None:
                 company = self.cursor.fetchone()
+            else: 
+                company = format_company(company)
 
             cursor.execute(
                 f"SELECT * FROM {username}_user_scores WHERE date=?", (date,))
@@ -176,3 +182,5 @@ class SQLController:
         return questions, subtitles
         
 
+def format_company(company):
+    return company.replace(" ", "_").lower()
