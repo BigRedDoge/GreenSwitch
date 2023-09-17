@@ -118,5 +118,6 @@ if __name__ == '__main__':
     #             print(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
 
     #print(sql.get_company_scores())
-    print(sql.get_company_leaderboard("EnviroBuilders"))
+    #print(sql.get_company_leaderboard("EnviroBuilders"))
+    print(sql.get_user_scores("EleanorDavis"))
 
