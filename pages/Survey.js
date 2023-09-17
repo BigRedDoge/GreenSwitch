@@ -4,14 +4,26 @@ import LikertScaleQuestion from './LikertScaleQuestion';
 
 const SurveyScreen = ({ navigation }) => {
 
-    const questions = [
-        "How would you rate the design of this app?",
-        "How satisfied are you with the performance?",
-        "Did you find the user interface intuitive?"
+
+
+    const likerts = [
+        {
+            question: "How would you rate the design of this app?",
+            subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
+        },
+        {
+            question: "How satisfied are you with the performance?",
+            subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
+        },
+        {
+            question: "Did you find the user interface intuitive?",
+            subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
+        }
     ];
+
     // const [questions, setQuestions] = useState([]);
     // Create an array of null values for the initial ratings
-    const [ratings, setRatings] = useState(new Array(questions.length).fill(null));
+    const [ratings, setRatings] = useState(new Array(likerts.length).fill(null));
     // If every rating satisfies condiition, true
     let allQuestionsAnswered = ratings.every(rating => rating !== null);
 
@@ -37,15 +49,16 @@ const SurveyScreen = ({ navigation }) => {
     return (
         <View>
             <Text>Survey Screen</Text>
-            {questions.map((question, index) => (
+            {likerts.map((likert, index) => (
                 <LikertScaleQuestion 
                     key={index}
-                    question={question}
+                    question={likert.question}
+                    optionSubtitles={likert.subtitles}
                     onAnswerChange={(value) => handleRatingUpdate(index, value)}
                 />
             ))}
             <Button 
-            title='Continue' 
+            title='Continue'
             onPress={handleFinish}
             disabled={!allQuestionsAnswered}/>
         </View>

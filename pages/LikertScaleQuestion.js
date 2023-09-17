@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function LikertScaleQuestion({ question, onAnswerChange }) {
+export default function LikertScaleQuestion({ question, optionSubtitles, onAnswerChange }) {
   const [rating, setRating] = useState(null);
 
   const handleRatingPress = (value) => {
@@ -9,25 +9,6 @@ export default function LikertScaleQuestion({ question, onAnswerChange }) {
     onAnswerChange(value);
   };
 
-  useEffect(() => {
-    // Replace the URL below with the appropriate endpoint for your questions
-    fetch('https://your-api-endpoint.com/questions')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Assuming your API returns an array of questions:
-            setQuestions(data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -35,18 +16,23 @@ export default function LikertScaleQuestion({ question, onAnswerChange }) {
 
       {/* Likert Scale */}
       <View style={styles.scaleContainer}>
-        {[1, 2, 3, 4, 5].map((value) => (
-          <TouchableOpacity
-            key={value}
-            style={[
-              styles.scaleItem,
-              rating === value && styles.selectedScaleItem,
-            ]}
-            onPress={() => handleRatingPress(value)}
-          >
+        {optionSubtitles.map((subtitle, index) => {
+        const value = index + 1;
+        return (
+          <View style={styles.subtitleContainer} key={value}>
+            <Text style={styles.subtitleText}>{subtitle}</Text>
+            <TouchableOpacity
+              style={[
+                styles.scaleItem,
+                rating === value && styles.selectedScaleItem,
+              ]}
+              onPress={() => handleRatingPress(value)}
+            >
             <Text style={styles.scaleText}>{value}</Text>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          </View>
+        );
+        })}
       </View>
     </View>
   );
