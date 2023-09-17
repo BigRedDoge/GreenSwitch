@@ -9,36 +9,67 @@ class SQLController:
         self.cursor = self.connection.cursor()
 
     # Get the x days of scores of a company
-    # returns dict of structure {day: {q1: value, q2: value, q3: value}}}
-    def get_company_scores(self, company, days):
-        company = format_company(company)
+    # NOPE returns dict of structure {day: {q1: value, q2: value, q3: value}}}
+    def get_company_scores(self):
         cursor = self.connection.cursor()
-        company_table = company + '_company_scores'
-        cursor.execute(
-            f"SELECT question1, question2, question3 FROM {company_table} ORDER BY date DESC LIMIT {days}")
-        results = cursor.fetchall()
+        self.cursor.execute(
+            f"SELECT * FROM companies WHERE company != 'A' AND company != 'a' LIMIT 3")
         scores = {}
-        for result in results:
-            scores.append(result[0] + result[1] + result[2])
+        companies = self.cursor.fetchall()
+        print(companies)
+
+        cursor = self.connection.cursor()
+        for company in companies:
+            company_table = format_company(company[0]) + '_company_scores'
+            cursor.execute(
+                f"SELECT question1, question2, question3 FROM {company_table} ORDER BY date DESC LIMIT 4")
+            results = cursor.fetchall()
+            print(results)
+            scores[company[0]] = sum([result[0] for result in results if result[0] is not None])
+        print(scores)
         return scores
     
-    # Get the leaderboard over the last x days
-    # TODO: BROKEN
-    def get_company_leaderboard(self, company, days, num_users):
-        company = format_company(company)
+    def get_company(self, username):
         cursor = self.connection.cursor()
-        users = cursor.execute(
+        cursor.execute(
+            f"SELECT company FROM users WHERE username=?", (username,))
+        return cursor.fetchone()[0]
+
+    # Get the leaderboard over the last x days
+    # DanielHarris|Secure12345|EnviroBuilders|1
+    # TODO: BROKEN
+    def get_company_leaderboard(self, company):
+        company = format_company_upper(company)
+        cursor = self.connection.cursor()
+        cursor.execute(
             f"SELECT username FROM users WHERE company=?", (company,))
-        leaderboard = []
+        users = cursor.fetchall()
+        leaderboard = {}
         # Get the score of each user
         for user in users:
             username = user[0]
-            score = cursor.execute(
-                f"SELECT score FROM {username}_user_scores ORDER BY date DESC LIMIT {days}")
-            leaderboard.append({"username": username,
-                                "score": score})
-        sorted(leaderboard, key=lambda k: k['score'])
-        return leaderboard[:num_users]
+            score_table = username + '_user_scores'
+            cursor.execute(
+                f"SELECT question1, question2, question3 FROM {score_table} ORDER BY date DESC LIMIT 4")
+            results = cursor.fetchall()
+            print(results)
+            leaderboard[username] = sum([result[0] for result in results if result[0] is not None])
+        #sorted(leaderboard, key=lambda x: leaderboard[x])
+        return leaderboard
+
+    # Get user scores
+    def get_user_scores(self, username):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"SELECT question1, question2, question3 FROM {username}_user_scores ORDER BY date DESC LIMIT 4")
+        results = cursor.fetchall()
+        print(results)
+        data = {}
+        d = [sum(res) for res in results if res is not None]
+        for i, dee in enumerate(d):
+            print(dee)
+            data[i] = sum(dee)
+        return data
 
     # Add company to database
     def add_company(self, company):
@@ -96,10 +127,10 @@ class SQLController:
             """
             
             cursor.execute(
-                    f"SELECT company FROM users WHERE username='A'")#, (username,))
+                    f"SELECT company FROM users WHERE username=?", (username,))
             
             if company is None:
-                company = self.cursor.fetchone()
+                company = format_company('Clean Energy Enterprises')
             else: 
                 company = format_company(company)
 
@@ -136,14 +167,6 @@ class SQLController:
         except Exception as e:
             print("add_user_score Exception", e)
             return False    
-
-    # Get the x days of scores of a user
-    # TODO: BROKEN
-    def get_user_scores(self, username, days):
-        self.cursor.execute(
-            f"SELECT score FROM {username}_user_scores ORDER BY date DESC LIMIT {days}")
-        return self.cursor.fetchall()
-    
 
     # Get the password of a user
     def get_user(self, username):
@@ -184,3 +207,6 @@ class SQLController:
 
 def format_company(company):
     return company.replace(" ", "_").lower()
+
+def format_company_upper(company):
+    return company.replace("_", " ")

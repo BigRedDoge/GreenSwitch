@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -22,7 +23,14 @@ const LoginScreen = ({ navigation }) => {
           navigation.navigate('Survey');
         }
         else {
-          console.error('login: data.success is false');
+          Alert.alert(
+            "Login Failed",
+            "Incorrect username or password",
+            [
+                { text: "OK", onPress: () => {} }
+            ],
+            { cancelable: true }
+        );
         }
       })
       .catch(error => {
