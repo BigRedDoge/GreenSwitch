@@ -33,7 +33,7 @@ class SQLController:
     # DanielHarris|Secure12345|EnviroBuilders|1
     # TODO: BROKEN
     def get_company_leaderboard(self, company):
-        company = format_company(company)
+        company = format_company_upper(company)
         cursor = self.connection.cursor()
         cursor.execute(
             f"SELECT username FROM users WHERE company=?", (company,))
@@ -195,3 +195,6 @@ class SQLController:
 
 def format_company(company):
     return company.replace(" ", "_").lower()
+
+def format_company_upper(company):
+    return company.replace("_", " ")
