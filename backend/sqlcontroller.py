@@ -25,10 +25,16 @@ class SQLController:
                 f"SELECT question1, question2, question3 FROM {company_table} ORDER BY date DESC LIMIT 4")
             results = cursor.fetchall()
             print(results)
-            scores[company] = sum([result[0] for result in results if result[0] is not None])
+            scores[company[0]] = sum([result[0] for result in results if result[0] is not None])
         print(scores)
         return scores
     
+    def get_company(self, username):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"SELECT company FROM users WHERE username=?", (username,))
+        return cursor.fetchone()[0]
+
     # Get the leaderboard over the last x days
     # DanielHarris|Secure12345|EnviroBuilders|1
     # TODO: BROKEN
