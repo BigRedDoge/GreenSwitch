@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, TouchableOpacity } from 'react-native';
 import LikertScaleQuestion from './LikertScaleQuestion';
 import Likert from './Likert';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const SurveyScreen = ({ navigation }) => {
 
     const getLikerts = () => {
         // Fetch likerts from the database
-        fetch("http://127.0.0.1:5000/get_questions")
+        fetch("http://54.198.183.99:5000/get_questions")
             .then(response => response.json())
             .then(data => {
                 let likerts = [];
@@ -26,12 +25,13 @@ const SurveyScreen = ({ navigation }) => {
 
     useEffect(() => {
         getLikerts();
+        setRatings(new Array(likerts.length).fill(null))
     }, []);
     // State to store the likerts
     const [likerts, setLikerts] = useState([]);
 
     // State to store the ratings
-    const [ratings, setRatings] = useState(new Array(testLikerts.length).fill(null));
+    const [ratings, setRatings] = useState([]);
     // If every rating satisfies condiition, true
     const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(ratings.every(rating => rating !== null));
     useEffect(() => {
@@ -54,9 +54,29 @@ const SurveyScreen = ({ navigation }) => {
     const handleFinish = () => {
         console.log("\n");
         likerts.forEach((item, index) => {
-            console.log(item, index);
+            fetch("http://54.198.183.99:5000/submit_score", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: item.id,
+                    score: item.score,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Depending on your backend's response structure, adjust this
+                // For example, if your backend sends `{ success: true }` on successful login:
+                if (data.success) {
+                    console.log(index, item, data.success);
+                } else {
+                    // Handle login failure, show an error message, etc.
+                    console.error("Login failed:", data.message);
+                }
+            })
         });
-
+        console.log("test");
         // Check if all questions have been answered (no null values in ratings array)
         if (allQuestionsAnswered) {
             // Write results to the database

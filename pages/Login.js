@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = () => {
         // Logic for handling login, e.g., authentication
-        fetch("http://127.0.0.1:5000/login", {
+        fetch("http://54.198.183.99:5000/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -38,14 +38,15 @@ const LoginScreen = ({ navigation }) => {
                 navigation.navigate('Survey');
             } else {
                 // Handle login failure, show an error message, etc.
-                console.error("Login failed:", data.message);
+                //console.error("Login failed:", data.message);
+                
             }
         })
         .catch(error => {
             console.error("Error during fetch:", error);
         });
         // Navigate to another screen after successful login
-        navigation.navigate('Survey'); // Navigate to 'Survey'
+        //navigation.navigate('Survey'); // Navigate to 'Survey'
     };
 
     return (
