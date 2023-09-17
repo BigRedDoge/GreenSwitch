@@ -102,20 +102,20 @@ if __name__ == '__main__':
         ['XavierRodriguez', 'Pa$$word123!', 'EnviroBuilders']
     ]
 
-    # for company in companies:
-    #     sql.add_company(company)
+    for company in companies:
+        sql.add_company(company)
 
-    # for dummy in dummies:
-    #     sql.create_user(dummy[0], dummy[1], dummy[2], 1)
-    #     dayweeks = [7, 14, 21, 28]
-    #     for i in range(20):
-    #         month = i % 5 + 1
-    #         day = dayweeks[i % 4]
-    #         year = 2023
-    #         fake_date = date(year, month, day)
-    #         for id in range(3):
-    #             sql.add_user_score(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
-    #             print(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
+    for dummy in dummies:
+        sql.create_user(dummy[0], dummy[1], dummy[2], 1)
+        dayweeks = [7, 14, 21, 28]
+        for i in range(20):
+            month = i % 5 + 1
+            day = dayweeks[i % 4]
+            year = 2023
+            fake_date = date(year, month, day)
+            for id in range(3):
+                sql.add_user_score(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
+                print(dummy[0], id, random.randint(1, 5), fake_date, dummy[2])
 
     #print(sql.get_company_scores())
     #print(sql.get_company_leaderboard("EnviroBuilders"))
