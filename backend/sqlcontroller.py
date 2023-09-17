@@ -9,7 +9,7 @@ class SQLController:
         self.cursor = self.connection.cursor()
 
     # Get the x days of scores of a company
-    # returns dict of structure {day: {q1: value, q2: value, q3: value}}}
+    # NOPE returns dict of structure {day: {q1: value, q2: value, q3: value}}}
     def get_company_scores(self):
         cursor = self.connection.cursor()
         self.cursor.execute(
@@ -31,21 +31,23 @@ class SQLController:
     
     # Get the leaderboard over the last x days
     # TODO: BROKEN
-    def get_company_leaderboard(self, company, days, num_users):
+    def get_company_leaderboard(self, company):
         company = format_company(company)
         cursor = self.connection.cursor()
         users = cursor.execute(
             f"SELECT username FROM users WHERE company=?", (company,))
-        leaderboard = []
+        leaderboard = {}
         # Get the score of each user
         for user in users:
             username = user[0]
-            score = cursor.execute(
-                f"SELECT score FROM {username}_user_scores ORDER BY date DESC LIMIT {days}")
-            leaderboard.append({"username": username,
-                                "score": score})
-        sorted(leaderboard, key=lambda k: k['score'])
-        return leaderboard[:num_users]
+            score_table = username + '_user_scores'
+            cursor.execute(
+                f"SELECT question1, question2, question3 FROM {score_table} ORDER BY date DESC LIMIT 4")
+            results = cursor.fetchall()
+            print(results)
+            leaderboard[username] = sum([result[0] for result in results if result[0] is not None])
+        #sorted(leaderboard, key=lambda x: leaderboard[x])
+        return leaderboard
 
     # Add company to database
     def add_company(self, company):
