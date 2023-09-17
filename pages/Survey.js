@@ -4,21 +4,6 @@ import LikertScaleQuestion from './LikertScaleQuestion';
 import Likert from './Likert';
 
 const SurveyScreen = ({ navigation }) => {
-  const likerts = [
-    {
-      question: "How would you rate the design of this app?",
-      subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-    },
-    {
-      question: "How satisfied are you with the performance?",
-      subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-    },
-    {
-      question: "Did you find the user interface intuitive?",
-      subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-    }
-  ];
-
 
     const getLikerts = () => {
         // Fetch likerts from the database

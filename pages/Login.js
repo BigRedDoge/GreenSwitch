@@ -7,59 +7,36 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     // Logic for handling login, e.g., authentication
-    fetch('http://127.0.0.1:5000/login', {
-      method: 'POST',
+    fetch("http://54.198.183.99:5000/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         username: username,
         password: password,
-      }),
-    });
-    // Navigate to another screen after successful login
-    navigation.navigate('Survey'); // Navigate to 'Survey'
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Depending on your backend's response structure, adjust this
+        // For example, if your backend sends `{ success: true }` on successful login:
+        if (data.success) {
+          navigation.navigate('Survey');
+        } else {
+          // Handle login failure, show an error message, etc.
+          //console.error("Login failed:", data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error during fetch:", error);
+      });
   };
 
-    const handleLogin = () => {
-        // Logic for handling login, e.g., authentication
-        fetch("http://54.198.183.99:5000/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Depending on your backend's response structure, adjust this
-            // For example, if your backend sends `{ success: true }` on successful login:
-            if (data.success) {
-                navigation.navigate('Survey');
-            } else {
-                // Handle login failure, show an error message, etc.
-                //console.error("Login failed:", data.message);
-                
-            }
-        })
-        .catch(error => {
-            console.error("Error during fetch:", error);
-        });
-        // Navigate to another screen after successful login
-        //navigation.navigate('Survey'); // Navigate to 'Survey'
-    };
-
-
-    navigation.navigate('Admin');
-  };
   const handleLeaderboardButton = () => {
-    // Navigate to the Admin screen
+    // Navigate to the Leaderboard screen
     navigation.navigate('Leaderboard');
   };
-
 
   return (
     <View style={styles.container}>
@@ -83,10 +60,6 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.adminButton} onPress={handleAdminButton}>
-        <Text style={styles.buttonText}>Admin</Text>
-      </TouchableOpacity>
-      
       <TouchableOpacity style={styles.adminButton} onPress={handleLeaderboardButton}>
         <Text style={styles.buttonText}>Leaderboard</Text>
       </TouchableOpacity>
