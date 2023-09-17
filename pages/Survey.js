@@ -1,43 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, TouchableOpacity } from 'react-native';
 import LikertScaleQuestion from './LikertScaleQuestion';
+import Likert from './Likert';
 
 const SurveyScreen = ({ navigation }) => {
 
-
-
-    const likerts = [
-        {
-            question: "How would you rate the design of this app?",
-            subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-        },
-        {
-            question: "How satisfied are you with the performance?",
-            subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-        },
-        {
-            question: "Did you find the user interface intuitive?",
-            subtitles: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-        }
+    const testLikerts = [
+        new Likert(136627, "How satisfied are you with the performance?", ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]),
+        new Likert(123627, "How would you rate the design of this app?", ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]),
+        new Likert(152362, "Did you find the user interface intuitive?", ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"])
     ];
 
-    // const [questions, setQuestions] = useState([]);
-    // Create an array of null values for the initial ratings
-    const [ratings, setRatings] = useState(new Array(likerts.length).fill(null));
+    // State to store the likerts
+    const [likerts, setLikerts] = useState(testLikerts);
+
+    // State to store the ratings
+    const [ratings, setRatings] = useState(new Array(testLikerts.length).fill(null));
     // If every rating satisfies condiition, true
-    let allQuestionsAnswered = ratings.every(rating => rating !== null);
+    const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(ratings.every(rating => rating !== null));
+    useEffect(() => {
+        setAllQuestionsAnswered(ratings.every(rating => rating !== null));
+    }, [ratings]);
+    
 
     const handleRatingUpdate = (index, value) => {
+        // Update ratings array
         const newRatings = [...ratings];
         newRatings[index] = value;
         setRatings(newRatings);
+    
+        // Update score in the corresponding Likert object
+        const updatedLikerts = [...likerts];
+        updatedLikerts[index].score = value;
+        setLikerts(updatedLikerts);
     };
-
+    
     const handleFinish = () => {
+        console.log("\n");
+        likerts.forEach((item, index) => {
+            console.log(item, index);
+        });
+
         // Check if all questions have been answered (no null values in ratings array)
         if (allQuestionsAnswered) {
             // Write results to the database
-
+            
             // Navigate to 'Result' screen
             navigation.navigate('Result');
         } else {
@@ -58,9 +65,9 @@ const SurveyScreen = ({ navigation }) => {
                 />
             ))}
             <Button 
-            title='Continue'
-            onPress={handleFinish}
-            disabled={!allQuestionsAnswered}/>
+                title='Continue'
+                onPress={handleFinish}
+                disabled={!allQuestionsAnswered}/>
         </View>
     );
 };
