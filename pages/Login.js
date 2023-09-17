@@ -6,7 +6,6 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Logic for handling login, e.g., authentication
     fetch("http://54.198.183.99:5000/login", {
       method: "POST",
       headers: {
@@ -19,17 +18,15 @@ const LoginScreen = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(data => {
-        // Depending on your backend's response structure, adjust this
-        // For example, if your backend sends `{ success: true }` on successful login:
-        if (data.success) {
+        if(data.success) {
           navigation.navigate('Survey');
-        } else {
-          // Handle login failure, show an error message, etc.
-          //console.error("Login failed:", data.message);
+        }
+        else {
+          console.error('login: data.success is false');
         }
       })
       .catch(error => {
-        console.error("Error during fetch:", error);
+        console.error("login: Error during fetch:", error);
       });
   };
 
