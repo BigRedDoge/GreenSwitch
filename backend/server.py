@@ -28,7 +28,7 @@ def login():
     else:
         print("Not logged in")
         return jsonify({'success': False})
-    
+
 @app.route('/logout', methods=['POST'])
 @login_required
 def logout():
@@ -86,6 +86,7 @@ def get_company_leaderboard():
     leaderboard = sql.get_company_leaderboard(company, days, num_users)
     return jsonify(leaderboard)
 
+
 @app.route('/get_questions', methods=['GET'])
 def get_questions():
     q_count = 3
@@ -99,12 +100,16 @@ def get_questions():
 @app.route('/submit_score', methods=['POST'])
 def submit_score():
     username = current_user.username
+    print(username)
     score = request.json.get('score')
     id = request.json.get('id')
     date = date.today()
     success = sql.add_user_score(username, id, score, date)
     return jsonify({'success': success})
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id, sql.get_user(user_id))
 
 # route for answers to questions -> calculate score and enter into db
 # number of responses for questions
@@ -112,7 +117,6 @@ def submit_score():
 # user streaks - variable based on company
 # users to be marked as admin
 # users each question score tracked
-# error handling
 
 
 # Have you recycled in the past day/week? - ["Not at all", "Rarely", "Sometimes", "Often", "Very Often"]

@@ -134,7 +134,7 @@ class SQLController:
             cursor.execute("SELECT password FROM users WHERE username=?", (username,))
             password = cursor.fetchone()
             if password is not None:
-                return cursor.fetchone()[0]
+                return password[0]
             return None
         except Exception as e:
             print("get_user Exception", e)
