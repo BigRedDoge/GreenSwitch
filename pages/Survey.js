@@ -9,7 +9,7 @@ const SurveyScreen = ({ navigation }) => {
         "How satisfied are you with the performance?",
         "Did you find the user interface intuitive?"
     ];
-    
+    // const [questions, setQuestions] = useState([]);
     // Create an array of null values for the initial ratings
     const [ratings, setRatings] = useState(new Array(questions.length).fill(null));
     // If every rating satisfies condiition, true

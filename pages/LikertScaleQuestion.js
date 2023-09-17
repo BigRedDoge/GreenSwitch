@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function LikertScaleQuestion({ question, onAnswerChange }) {
@@ -8,6 +8,26 @@ export default function LikertScaleQuestion({ question, onAnswerChange }) {
     setRating(value);
     onAnswerChange(value);
   };
+
+  useEffect(() => {
+    // Replace the URL below with the appropriate endpoint for your questions
+    fetch('https://your-api-endpoint.com/questions')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Assuming your API returns an array of questions:
+            setQuestions(data);
+            setLoading(false);
+        })
+        .catch(error => {
+            setError(error);
+            setLoading(false);
+        });
+  }, []);
 
   return (
     <View style={styles.container}>
